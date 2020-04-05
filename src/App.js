@@ -22,7 +22,7 @@ function Claped(props) {
 
   return (
     <div className="clapcount">
-      <div className = "hoverzone"
+      <div className="hoverzone"
         onMouseEnter={props.onMouseEnter}
         onMouseLeave={props.onMouseLeave}
       >
@@ -47,25 +47,34 @@ function ClapButton(props) {
 
 function PostItem(props) {
   return (
-    <li key={props.post.postid}>
-      {props.post.text}
-      <p>投稿日時:{props.post.time}</p>
-      <p>{props.post.myname}から{props.post.yourname}へのメッセージ</p>
-      <ClapButton
-        onClickClap={props.onClickClap}
-        post={props.post}
-        id={props.id}
-        givenid={props.givenid}
-      />
-      <span>
-        <Claped
-          onMouseEnter={props.onMouseEnter}
-          onMouseLeave={props.onMouseLeave}
-          post={props.post}
-          hover={props.hover}
-        />
-      </span>
-    </li>
+    <div className="my-4 container">
+      <li key={props.post.postid}>
+        <h5>{props.post.myname}から{props.post.yourname}へのメッセージ</h5>
+        <div className="text-center">{props.post.text}</div>
+        <p className="text-right">{props.post.time}</p>
+
+        <div className="row">
+          <div className="mt-2">
+            <ClapButton
+              onClickClap={props.onClickClap}
+              post={props.post}
+              id={props.id}
+              givenid={props.givenid}
+            />
+          </div>
+          <div className="pb-2">
+            <Claped
+              onMouseEnter={props.onMouseEnter}
+              onMouseLeave={props.onMouseLeave}
+              post={props.post}
+              hover={props.hover}
+            />
+          </div>
+        </div>
+
+
+      </li>
+    </div>
   );
 }
 
@@ -74,7 +83,7 @@ function PostItem(props) {
 function PostList(props) {
   const posts = props.posts.map(post => {
     return (
-      <div key={post.postid}>
+      <div key={post.postid} className="list-unstyled">
         <PostItem
           key={post.postid}
           post={post}
@@ -96,17 +105,25 @@ function PostList(props) {
 function PostForm(props) {
   if (props.item.length > 4) {
     return (
-      <form onSubmit={props.addPost}>
-        <input type="text" value={props.item} onChange={props.updateItem} />
-        <input type="submit" value="投稿" />
-      </form>
+      <div className="form-group">
+        <form onSubmit={props.addPost}>
+          <textarea type="text" value={props.item} onChange={props.updateItem} className="form-control py-5" />
+          <div className="text-right mt-2">
+            <input type="submit" value="投稿" />
+          </div>
+        </form>
+      </div>
     );
   } else {
     return (
-      <form onSubmit={props.addPost}>
-        <input type="text" value={props.item} onChange={props.updateItem} />
-        <input type="submit" value="投稿" disabled />
-      </form>
+      <div className="form-group">
+        <form onSubmit={props.addPost}>
+          <textarea type="text" value={props.item} onChange={props.updateItem} className="form-control py-5" />
+          <div className="text-right mt-2">
+            <input type="submit" value="投稿" disabled />
+          </div>
+        </form>
+      </div>
     );
   }
 
@@ -147,7 +164,7 @@ class App extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({hover: true })
+    this.setState({ hover: true })
   }
   onMouseLeave = () => {
     this.setState({ hover: false })
@@ -225,11 +242,19 @@ class App extends React.Component {
 
   componentDidUpdate() {
     localStorage.setItem('posts', JSON.stringify(this.state.posts));
+    localStorage.setItem('users', JSON.stringify(this.state.users));
   }
 
   componentDidMount() {
     this.setState({
       posts: JSON.parse(localStorage.getItem('posts')) || [],
+      users: JSON.parse(localStorage.getItem('users')) || [
+        { userid: 0, name: "鈴木", face: "user0.png", myclap: 100, getclap: 0 },
+        { userid: 1, name: "田中", face: "user1.png", myclap: 100, getclap: 0 },
+        { userid: 2, name: "佐藤", face: "user2.png", myclap: 100, getclap: 0 },
+        { userid: 3, name: "小林", face: "user3.png", myclap: 100, getclap: 0 },
+        { userid: 4, name: "東口", face: "user4.png", myclap: 100, getclap: 0 },
+      ],
     });
   }
 
@@ -265,42 +290,64 @@ class App extends React.Component {
 
 
     return (
-      <div className="all">
-        <footer>
-          <select
-            value={this.state.id}
-            onChange={this.onChangeMyselect}>
-            {myOptions}
-          </select>
+      <div className="container mt-5">
+        <footer className="container">
+          <div className="row bg-info p-4 rounded">
+            <div className="container col-5">
+              <div className="container mb-2">
+                <img src={this.state.users[this.state.id].face} className="face " alt="自分" />
+              </div>
+              あなたは<select
+                value={this.state.id}
+                onChange={this.onChangeMyselect}
+                className=" text-center ml-1 px-3">
+                {myOptions}
+              </select>
+            </div>
+            <div className="container col-7 d-flex align-items-center">
+              <ul className="list-unstyled">
+                <li>
+                  持ってる拍手：{this.state.users[this.state.id].myclap}
+                </li>
+                <li>
+                  もらった拍手：{this.state.users[this.state.id].getclap}
+                </li>
+              </ul>
+            </div>
+          </div>
 
-          <img src={this.state.users[this.state.id].face} className="face" alt="自分" />
+          <div className="p-4 bg-light row">
+            <div className="container col-5">
+              <div className="container">
+                誰にメッセージ伝えますか?
+              </div>
+              <div className="container mb-2">
+                <img src={this.state.users[this.state.givenid].face} className="face" alt="相手" />
+              </div>
 
-          <ul>
-            <li>
-              持ってる拍手：{this.state.users[this.state.id].myclap}
-            </li>
-            <li>
-              もらった拍手：{this.state.users[this.state.id].getclap}
-            </li>
-          </ul>
+              <select
+                value={this.state.givenid}
+                onChange={this.onChangeOpselect}
+                className=" text-center ml-4 px-3"
+              >
+                {opOptions}
+              </select>
+            </div>
+
+
+            <div className="container col-7 ">
+              <PostForm
+                item={this.state.item}
+                updateItem={this.updateItem}
+                addPost={this.addPost}
+              />
+            </div>
+          </div>
 
 
 
-          <select
-            value={this.state.givenid}
-            onChange={this.onChangeOpselect}
-          >
-            {opOptions}
-          </select>
-
-          <img src={this.state.users[this.state.givenid].face} className="face" alt="相手" />
-
-          <PostForm
-            item={this.state.item}
-            updateItem={this.updateItem}
-            addPost={this.addPost}
-          />
-
+        </footer>
+        <div>
           <PostList
             posts={this.state.posts}
             users={this.state.users}
@@ -311,8 +358,7 @@ class App extends React.Component {
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           />
-
-        </footer>
+        </div>
       </div>
     );
   }
