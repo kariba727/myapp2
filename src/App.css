@@ -3,3 +3,32 @@
   height: 100px;
   text-align: center;
 }
+
+
+ .none  {
+  display: none;
+}
+
+.kari {
+  display: inline-block;
+  padding: 2px;
+  text-align: center;
+  font-size: 12px;
+  color: black;
+  border-radius: 5px;
+  background: skyblue;
+  width: 100px;
+}
+
+.all {
+  margin-top: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 400px;
+}
+.hoverzone {
+  width: 20px;
+  height: 20px;
+  
+  padding: 10px;
+}
