@@ -15,10 +15,12 @@ function Claped(props) {
   }).map((each) => {
     return (
       <p key={each.eachclapid}>
-        {each.eachclapname}:{each.eachclap}拍手
+        {each.eachclapname}：{each.eachclap} 拍手
       </p>
     );
   });
+
+  
 
   return (
     <div className="clapcount">
@@ -28,7 +30,7 @@ function Claped(props) {
       >
         {props.post.clap}
       </div>
-      <div className={`${props.hover ? "kari" : "none"}`} >拍手一覧<br />{selectclickname}</div>
+      <div className={`ml-3 mb-3${props.hover ? " kari" : " none"}`} >拍手一覧<br />{selectclickname}</div>
     </div>
   );
 }
@@ -71,9 +73,8 @@ function PostItem(props) {
             />
           </div>
         </div>
-
-
       </li>
+      <hr />
     </div>
   );
 }
@@ -83,7 +84,7 @@ function PostItem(props) {
 function PostList(props) {
   const posts = props.posts.map(post => {
     return (
-      <div key={post.postid} className="list-unstyled">
+      <div key={post.keyid} className="list-unstyled">
         <PostItem
           key={post.postid}
           post={post}
@@ -290,8 +291,8 @@ class App extends React.Component {
 
 
     return (
-      <div className="container mt-5">
-        <footer className="container">
+      <div className="container mt-5 main">
+        <header className="container">
           <div className="row bg-info p-4 rounded">
             <div className="container col-5">
               <div className="container mb-2">
@@ -346,8 +347,8 @@ class App extends React.Component {
 
 
 
-        </footer>
-        <div>
+        </header>
+        <div className="mb-200">
           <PostList
             posts={this.state.posts}
             users={this.state.users}
@@ -359,6 +360,12 @@ class App extends React.Component {
             onMouseLeave={this.onMouseLeave}
           />
         </div>
+
+        <footer>
+          <div className="container pb-10">
+
+          </div>
+        </footer>
       </div>
     );
   }
